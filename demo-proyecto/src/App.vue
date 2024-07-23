@@ -5,7 +5,7 @@
 
       [<span><router-link to="/edificios">Edificios</router-link></span>]
       [<span><router-link to="/departamentos">Departamentos</router-link></span>]
-      [<span><router-link to="/departamentos-dos">Departamentos dos</router-link></span>]
+      [<span><router-link to="/departamentos-dos">DepartamentosDos</router-link></span>]
 
   </nav>
   <router-view></router-view>
