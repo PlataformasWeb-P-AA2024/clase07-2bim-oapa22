@@ -12,7 +12,7 @@ from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
 from rest_framework import permissions
 from administrativo.serializers import UserSerializer, GroupSerializer, \
-EstudianteSerializer, NumeroTelefonicoSerializer
+EdificioSerializer, DepartamentoSerializer
 
 # importar las clases de models.py
 from administrativo.models import *
@@ -23,19 +23,9 @@ from administrativo.forms import *
 # Create your views here.
 
 def index(request):
-    """
-        Listar los registros del modelo Estudiante,
-        obtenidos de la base de datos.
-    """
-    # a través del ORM de django se obtiene
-    # los registros de la entidad; el listado obtenido
-    # se lo almacena en una variable llamada
-    # estudiantes
-    estudiantes = Estudiante.objects.all()
-    # en la variable tipo diccionario llamada informacion_template
-    # se agregará la información que estará disponible
-    # en el template
-    informacion_template = {'estudiantes': estudiantes, 'numero_estudiantes': len(estudiantes)}
+    edificios = Edificio.objects.all()
+
+    informacion_template = {'edificios': edificios, 'numero_edificios': len(edificios)}
     return render(request, 'index.html', informacion_template)
 
 def ingreso(request):
@@ -61,116 +51,112 @@ def logout_view(request):
     messages.info(request, "Has salido del sistema")
     return redirect(index)
 
-def obtener_estudiante(request, id):
-    """
-        Listar los registros del modelo Estudiante,
-        obtenidos de la base de datos.
-    """
-    # a través del ORM de django se obtiene
-    # los registros de la entidad; el listado obtenido
-    # se lo almacena en una variable llamada
-    # estudiantes
-    estudiante = Estudiante.objects.get(pk=id)
-    # en la variable tipo diccionario llamada informacion_template
-    # se agregará la información que estará disponible
-    # en el template
-    informacion_template = {'estudiante': estudiante}
-    return render(request, 'obtener_estudiante.html', informacion_template)
+@login_required(login_url='/entrando/login/')
+def obtener_edificio(request, id):
+    edificio = Edificio.objects.get(pk=id)
 
+    informacion_template = {'edificio': edificio}
+    return render(request, 'obtenerEdificio.html', informacion_template)
 
 @login_required(login_url='/entrando/login/')
-# @permission_required('administrativo.add_estudiante', )
-@permission_required('administrativo.add_estudiante', login_url="/entrando/login/")
-def crear_estudiante(request):
+def crear_edificio(request):
     """
     """
     if request.method=='POST':
-        formulario = EstudianteForm(request.POST)
+        formulario = EdificioForm(request.POST)
         print(formulario.errors)
         if formulario.is_valid():
             formulario.save() # se guarda en la base de datos
             return redirect(index)
     else:
-        formulario = EstudianteForm()
+        formulario = EdificioForm()
     diccionario = {'formulario': formulario}
 
-    return render(request, 'crearEstudiante.html', diccionario)
-
+    return render(request, 'crearEdificio.html', diccionario)
 
 @login_required(login_url='/entrando/login/')
-def editar_estudiante(request, id):
+def editar_edificio(request, id):
     """
     """
-    estudiante = Estudiante.objects.get(pk=id)
+    edificio = Edificio.objects.get(pk=id)
     if request.method=='POST':
-        formulario = EstudianteForm(request.POST, instance=estudiante)
+        formulario = EdificioForm(request.POST, instance=edificio)
         print(formulario.errors)
         if formulario.is_valid():
             formulario.save()
             return redirect(index)
     else:
-        formulario = EstudianteForm(instance=estudiante)
+        formulario = EdificioForm(instance=edificio)
     diccionario = {'formulario': formulario}
 
-    return render(request, 'editarEstudiante.html', diccionario)
+    return render(request, 'editarEdificio.html', diccionario)
 
-
-def eliminar_estudiante(request, id):
+@login_required(login_url='/entrando/login/')
+def eliminar_edificio(request, id):
     """
     """
-    estudiante = Estudiante.objects.get(pk=id)
-    estudiante.delete()
+    edificio = Edificio.objects.get(pk=id)
+    edificio.delete()
     return redirect(index)
 
-
-def crear_numero_telefonico(request):
+@login_required(login_url='/entrando/login/')
+def crear_departamento(request):
     """
     """
 
     if request.method=='POST':
-        formulario = NumeroTelefonicoForm(request.POST)
+        formulario = DepartamentoForm(request.POST)
         print(formulario.errors)
         if formulario.is_valid():
             formulario.save()
             return redirect(index)
     else:
-        formulario = NumeroTelefonicoForm()
+        formulario = DepartamentoForm()
     diccionario = {'formulario': formulario}
 
-    return render(request, 'crearNumeroTelefonico.html', diccionario)
+    return render(request, 'crearDepartamento.html', diccionario)
 
-
-def editar_numero_telefonico(request, id):
+@login_required(login_url='/entrando/login/')
+def editar_departamento(request, id):
     """
     """
-    telefono = NumeroTelefonico.objects.get(pk=id)
+    departamento = Departamento.objects.get(pk=id)
     if request.method=='POST':
-        formulario = NumeroTelefonicoForm(request.POST, instance=telefono)
+        formulario = DepartamentoForm(request.POST, instance=departamento)
         print(formulario.errors)
         if formulario.is_valid():
             formulario.save()
             return redirect(index)
     else:
-        formulario = NumeroTelefonicoForm(instance=telefono)
+        formulario = DepartamentoForm(instance=departamento)
     diccionario = {'formulario': formulario}
 
-    return render(request, 'crearNumeroTelefonico.html', diccionario)
+    return render(request, 'crearDepartamento.html', diccionario)
 
-def crear_numero_telefonico_estudiante(request, id):
+@login_required(login_url='/entrando/login/')
+def crear_departamento_edificio(request, id):
     """
     """
-    estudiante = Estudiante.objects.get(pk=id)
+    edificio = Edificio.objects.get(pk=id)
     if request.method=='POST':
-        formulario = NumeroTelefonicoEstudianteForm(estudiante, request.POST)
+        formulario = DepartamentoEdificioForm(edificio, request.POST)
         print(formulario.errors)
         if formulario.is_valid():
             formulario.save()
             return redirect(index)
     else:
-        formulario = NumeroTelefonicoEstudianteForm(estudiante)
-    diccionario = {'formulario': formulario, 'estudiante': estudiante}
+        formulario = DepartamentoEdificioForm(edificio)
+    diccionario = {'formulario': formulario, 'edificio': edificio}
 
-    return render(request, 'crearNumeroTelefonicoEstudiante.html', diccionario)
+    return render(request, 'crearDepartamentoEdificio.html', diccionario)
+
+@login_required(login_url='/entrando/login/')
+def eliminar_departamento(request, id):
+    """
+    """
+    departamento = Departamento.objects.get(pk=id)
+    departamento.delete()
+    return redirect(index)
 
 # crear vistas a través de viewsets
 class UserViewSet(viewsets.ModelViewSet):
@@ -179,7 +165,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
 
 
 class GroupViewSet(viewsets.ModelViewSet):
@@ -188,38 +174,24 @@ class GroupViewSet(viewsets.ModelViewSet):
     """
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
 
 
-class EstudianteViewSet(viewsets.ModelViewSet):
+class EdificioViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     This viewset automatically provides `list`, `create`, `retrieve`,
     `update` and `destroy` actions.
     """
-    queryset = Estudiante.objects.all()
-    serializer_class = EstudianteSerializer
+    queryset = Edificio.objects.all()
+    serializer_class = EdificioSerializer
     # permission_classes = [permissions.IsAuthenticated]
 
-    def get_queryset(self):
-        """
-        """
-        valor = self.request.query_params
-        print(valor)
-        if 'nombre' in valor.keys():
-            return Estudiante.objects.filter(nombre=valor['nombre']).all()
-        else:
-            if 'correo' in valor.keys():
-                return Estudiante.objects.filter(correo__contains=valor['correo']).all()
-            else:
-                return Estudiante.objects.all()
 
-
-class NumeroTelefonicoViewSet(viewsets.ModelViewSet):
-# class NumeroTelefonicoViewSet(viewsets.ReadOnlyModelViewSet):
+class DepartamentoViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
-    queryset = NumeroTelefonico.objects.all()
-    serializer_class = NumeroTelefonicoSerializer
+    queryset = Departamento.objects.all()
+    serializer_class = DepartamentoSerializer
     # permission_classes = [permissions.IsAuthenticated]

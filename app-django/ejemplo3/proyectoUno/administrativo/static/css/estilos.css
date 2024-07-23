@@ -26,7 +26,7 @@ tr:hover {
   background-color: #258EAD;
 }
 
-input[type=text], input[type=number] {
+input[type=text], input[type=number|email] {
   width: 25%;
   padding: 5px 5px;
   box-sizing: border-box;
@@ -50,10 +50,10 @@ label {
 }
 
 .miformulario{
-  width: 40%;
+  width: 100%;
 }
 
-.nombre_usuario {
+.errorlist li {
   color: red;
 }
 
@@ -82,3 +82,40 @@ footer{
   background: #5E5E5E;
   color: #FFF;
 }
+
+/*
+  agregar dos columnas
+  tomado de:
+  https://dev.to/drews256/ridiculously-easy-row-and-column-layouts-with-flexbox-1k01
+*/
+
+.wrapper-dos-columnas {
+  margin: 15px;
+  background-color: red;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 1;
+}
+
+.izquierda-column {
+  background-color: #FFF;
+  height: 200px;
+}
+
+.derecha-column {
+  background-color: #FFF;
+  height: 200px;
+}
+
+/* fin dos columnas*/

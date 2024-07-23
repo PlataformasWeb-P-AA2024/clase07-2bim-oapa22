@@ -1,7 +1,8 @@
-"""proyectoUno URL Configuration
+"""
+URL configuration for residencial project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/3.0/topics/http/urls/
+    https://docs.djangoproject.com/en/5.0/topics/http/urls/
 Examples:
 Function views
     1. Add an import:  from my_app import views
@@ -25,8 +26,8 @@ from administrativo import views
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
-router.register(r'estudiantes', views.EstudianteViewSet)
-router.register(r'numerost', views.NumeroTelefonicoViewSet)
+router.register(r'edificios', views.EdificioViewSet)
+router.register(r'departamentos', views.DepartamentoViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
